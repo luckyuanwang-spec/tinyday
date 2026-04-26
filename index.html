@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyDay - Every Day is a Tiny Day</title>
+  <meta name="description" content="One photo, one note, one beautiful memory of your baby's first years. Track your baby's daily growth with TinyDay.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFF5F5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #F8A4B8; --pink-light: #FFF0F3; --pink-dark: #E8879C;
+      --cream: #FFF8F0; --gold: #F0C75E; --text: #2D2D2D; --text-light: #8B8B8B;
+      --bg: #FFFFFF; --border: #F0E6E8; --shadow: rgba(248,164,184,0.15);
+    }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    
+    /* Landing Page */
+    #landing { min-height: 100vh; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; max-width: 1200px; margin: 0 auto; }
+    .logo { font-size: 24px; font-weight: 800; color: var(--pink-dark); }
+    .logo span { color: var(--gold); }
+    .nav-btns { display: flex; gap: 12px; }
+    .btn { padding: 10px 24px; border-radius: 50px; border: none; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.3s; }
+    .btn-outline { background: transparent; border: 2px solid var(--pink); color: var(--pink-dark); }
+    .btn-outline:hover { background: var(--pink-light); }
+    .btn-primary { background: linear-gradient(135deg, var(--pink), var(--pink-dark)); color: white; box-shadow: 0 4px 15px var(--shadow); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--shadow); }
+    .hero { display: flex; align-items: center; justify-content: center; padding: 40px 24px 80px; gap: 60px; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; }
+    .hero-text { flex: 1; min-width: 300px; }
+    .hero-text h1 { font-size: 48px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .hero-text h1 em { font-style: normal; color: var(--pink); }
+    .hero-text p { font-size: 18px; color: var(--text-light); margin-bottom: 32px; line-height: 1.6; }
+    .hero-phone { flex: 1; min-width: 300px; display: flex; justify-content: center; }
+    .phone-frame { width: 280px; height: 560px; border-radius: 36px; border: 8px solid var(--text); background: var(--cream); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); position: relative; }
+    .phone-screen { padding: 12px; height: 100%; display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: auto repeat(5, 1fr); gap: 4px; align-content: start; }
+    .phone-header { grid-column: 1 / -1; text-align: center; padding: 8px 0; }
+    .phone-header h3 { font-size: 16px; color: var(--text); }
+    .phone-header small { font-size: 12px; color: var(--text-light); }
+    .cal-cell { border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: white; }
+    .cal-cell img { width: 100%; height: 100%; object-fit: cover; }
+    .cal-cell.empty { background: var(--pink-light); display: flex; align-items: center; justify-content: center; color: var(--pink); font-size: 14px; }
+    .features { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
+    .features h2 { text-align: center; font-size: 36px; margin-bottom: 48px; }
+    .features h2 em { font-style: normal; color: var(--pink); }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; }
+    .feature-card { background: white; border-radius: 20px; padding: 32px; text-align: center; border: 1px solid var(--border); transition: all 0.3s; }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px var(--shadow); }
+    .feature-icon { font-size: 48px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 20px; margin-bottom: 8px; }
+    .feature-card p { color: var(--text-light); line-height: 1.6; }
+    .testimonials { padding: 80px 24px; background: var(--cream); }
+    .testimonials h2 { text-align: center; font-size: 36px; margin-bottom: 48px; }
+    .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .test-card { background: white; border-radius: 16px; padding: 24px; }
+    .test-card .stars { color: var(--gold); margin-bottom: 12px; font-size: 18px; }
+    .test-card p { color: var(--text-light); line-height: 1.6; margin-bottom: 16px; font-style: italic; }
+    .test-card .author { font-weight: 700; color: var(--text); font-style: normal; }
+    .cta-section { padding: 100px 24px; text-align: center; }
+    .cta-section h2 { font-size: 40px; margin-bottom: 16px; }
+    .cta-section h2 em { font-style: normal; color: var(--pink); }
+    .cta-section p { color: var(--text-light); font-size: 18px; margin-bottom: 32px; }
+    .footer { text-align: center; padding: 32px; color: var(--text-light); font-size: 14px; border-top: 1px solid var(--border); }
+
+    /* App Container */
+    #app { display: none; max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; }
+    
+    /* Auth Pages */
+    .auth-page { padding: 40px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+    .auth-page .logo { font-size: 32px; margin-bottom: 8px; }
+    .auth-page .subtitle { color: var(--text-light); margin-bottom: 32px; }
+    .auth-form { width: 100%; max-width: 360px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text); }
+    .form-group input, .form-group select { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--border); font-family: 'Nunito', sans-serif; font-size: 15px; transition: border-color 0.3s; outline: none; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--pink); }
+    .google-btn { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--border); background: white; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; transition: all 0.3s; }
+    .google-btn:hover { border-color: var(--text-light); }
+    .divider { display: flex; align-items: center; margin: 20px 0; color: var(--text-light); font-size: 13px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .divider::before { margin-right: 16px; }
+    .divider::after { margin-left: 16px; }
+    .auth-switch { text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px; }
+    .auth-switch a { color: var(--pink-dark); font-weight: 700; text-decoration: none; cursor: pointer; }
+    .btn-full { width: 100%; padding: 14px; font-size: 16px; }
+
+    /* Setup Page */
+    .setup-page { padding: 40px 24px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .setup-page .progress { display: flex; gap: 8px; margin-bottom: 32px; }
+    .setup-page .progress .step { width: 40px; height: 4px; border-radius: 2px; background: var(--border); }
+    .setup-page .progress .step.active { background: var(--pink); }
+    .avatar-upload { width: 120px; height: 120px; border-radius: 50%; background: var(--pink-light); border: 3px dashed var(--pink); display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 24px; font-size: 40px; overflow: hidden; transition: all 0.3s; }
+    .avatar-upload:hover { border-color: var(--pink-dark); }
+    .avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Main App */
+    .app-header { padding: 16px 20px 8px; display: flex; justify-content: space-between; align-items: center; }
+    .app-header .baby-info { display: flex; align-items: center; gap: 12px; }
+    .app-header .baby-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--pink-light); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .app-header .baby-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .app-header .baby-name { font-weight: 800; font-size: 18px; }
+    .app-header .baby-age { font-size: 13px; color: var(--text-light); }
+    .app-header .settings-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--pink-light); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+    .stats-bar { display: flex; justify-content: space-around; padding: 12px 20px; margin: 0 20px; background: var(--pink-light); border-radius: 16px; margin-bottom: 16px; }
+    .stat-item { text-align: center; }
+    .stat-item .num { font-weight: 800; font-size: 20px; color: var(--pink-dark); }
+    .stat-item .label { font-size: 11px; color: var(--text-light); }
+
+    /* Calendar */
+    .cal-nav { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 16px; }
+    .cal-nav h2 { font-size: 20px; }
+    .cal-nav button { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--pink-light); cursor: pointer; font-size: 16px; color: var(--pink-dark); display: flex; align-items: center; justify-content: center; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 0 16px; }
+    .cal-weekday { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-light); padding: 8px 0; }
+    .cal-day { aspect-ratio: 1; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; transition: all 0.2s; }
+    .cal-day:hover { transform: scale(1.05); }
+    .cal-day.empty { background: transparent; }
+    .cal-day.has-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .cal-day.no-photo { background: var(--pink-light); border: 2px dashed var(--pink); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--pink); }
+    .cal-day.today { box-shadow: 0 0 0 3px var(--gold); }
+    .cal-day .day-num { position: absolute; bottom: 2px; left: 4px; font-size: 10px; font-weight: 700; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+    /* Add Page */
+    .add-page { padding: 20px; }
+    .add-page .date-header { text-align: center; margin-bottom: 24px; }
+    .add-page .date-header h2 { font-size: 20px; }
+    .add-page .date-header p { color: var(--text-light); font-size: 14px; }
+    .photo-upload { width: 100%; aspect-ratio: 1; max-height: 300px; border-radius: 20px; background: var(--cream); border: 3px dashed var(--pink); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 20px; overflow: hidden; transition: all 0.3s; }
+    .photo-upload:hover { border-color: var(--pink-dark); background: var(--pink-light); }
+    .photo-upload .icon { font-size: 48px; margin-bottom: 8px; }
+    .photo-upload .text { color: var(--text-light); font-size: 14px; }
+    .photo-upload img { width: 100%; height: 100%; object-fit: cover; }
+    .quick-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .quick-tag { padding: 6px 14px; border-radius: 50px; border: 1px solid var(--border); background: white; font-size: 13px; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif; }
+    .quick-tag:hover { background: var(--pink-light); border-color: var(--pink); color: var(--pink-dark); }
+    .note-input { width: 100%; min-height: 100px; padding: 16px; border-radius: 16px; border: 2px solid var(--border); font-family: 'Nunito', sans-serif; font-size: 15px; resize: none; outline: none; transition: border-color 0.3s; }
+    .note-input:focus { border-color: var(--pink); }
+    .note-input::placeholder { color: var(--text-light); }
+
+    /* Timeline */
+    .timeline-page { padding: 20px 16px 100px; }
+    .timeline-month { margin-bottom: 24px; }
+    .timeline-month h3 { font-size: 16px; color: var(--text-light); margin-bottom: 12px; padding-left: 4px; }
+    .timeline-item { display: flex; gap: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; padding: 8px; border-radius: 16px; }
+    .timeline-item:hover { background: var(--pink-light); }
+    .timeline-item .tl-photo { width: 64px; height: 64px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: var(--cream); display: flex; align-items: center; justify-content: center; }
+    .timeline-item .tl-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .timeline-item .tl-content { flex: 1; min-width: 0; }
+    .timeline-item .tl-date { font-size: 12px; color: var(--text-light); margin-bottom: 2px; }
+    .timeline-item .tl-note { font-size: 14px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .timeline-item .tl-day { font-size: 12px; color: var(--pink-dark); font-weight: 700; }
+
+    /* Share Page */
+    .share-page { padding: 20px; }
+    .share-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    .share-card .sc-photo { width: 100%; aspect-ratio: 1; background: var(--cream); overflow: hidden; }
+    .share-card .sc-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .share-card .sc-info { padding: 20px; }
+    .share-card .sc-baby { font-weight: 800; font-size: 16px; color: var(--pink-dark); }
+    .share-card .sc-date { font-size: 13px; color: var(--text-light); margin-bottom: 8px; }
+    .share-card .sc-note { font-size: 15px; line-height: 1.5; }
+    .share-card .sc-footer { padding: 12px 20px; background: var(--cream); display: flex; justify-content: space-between; align-items: center; }
+    .share-card .sc-footer .brand { font-weight: 800; color: var(--pink-dark); }
+    .share-btns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .share-btn { padding: 14px; border-radius: 14px; border: none; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s; }
+    .share-btn:hover { transform: translateY(-2px); }
+    .share-btn.s-twitter { background: #1DA1F2; color: white; }
+    .share-btn.s-facebook { background: #4267B2; color: white; }
+    .share-btn.s-copy { background: var(--pink); color: white; }
+    .share-btn.s-save { background: var(--gold); color: white; }
+    .family-section { margin-top: 32px; text-align: center; }
+    .family-section h3 { font-size: 18px; margin-bottom: 8px; }
+    .family-section p { color: var(--text-light); font-size: 14px; margin-bottom: 16px; }
+    .family-link { display: flex; align-items: center; gap: 8px; background: var(--pink-light); padding: 12px 16px; border-radius: 12px; font-size: 14px; color: var(--pink-dark); }
+    .family-link code { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Detail Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: white; border-radius: 24px; max-width: 400px; width: 100%; overflow: hidden; max-height: 90vh; overflow-y: auto; }
+    .modal .modal-photo { width: 100%; aspect-ratio: 1; background: var(--cream); overflow: hidden; }
+    .modal .modal-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .modal .modal-content { padding: 20px; }
+    .modal .modal-date { font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+    .modal .modal-day { font-size: 14px; color: var(--pink-dark); font-weight: 700; margin-bottom: 12px; }
+    .modal .modal-note { font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
+    .modal .modal-close { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--pink-light); color: var(--pink-dark); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; }
+
+    /* Bottom Nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: white; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 8px 0; padding-bottom: max(8px, env(safe-area-inset-bottom)); z-index: 50; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; padding: 4px 12px; border: none; background: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+    .nav-item .nav-icon { font-size: 22px; }
+    .nav-item .nav-label { font-size: 10px; color: var(--text-light); font-weight: 600; }
+    .nav-item.active .nav-label { color: var(--pink-dark); }
+    .nav-item.add-btn { margin-top: -20px; }
+    .nav-item.add-btn .nav-icon { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--pink-dark)); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; box-shadow: 0 4px 15px var(--shadow); }
+
+    /* Settings */
+    .settings-page { padding: 20px; padding-bottom: 100px; }
+    .settings-section { margin-bottom: 24px; }
+    .settings-section h3 { font-size: 14px; color: var(--text-light); margin-bottom: 12px; padding-left: 4px; }
+    .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: white; border-radius: 14px; margin-bottom: 8px; border: 1px solid var(--border); }
+    .settings-item .si-left { display: flex; align-items: center; gap: 12px; }
+    .settings-item .si-icon { font-size: 20px; }
+    .settings-item .si-label { font-weight: 700; font-size: 15px; }
+    .settings-item .si-value { color: var(--text-light); font-size: 14px; }
+    .btn-danger { background: #FF6B6B; color: white; margin-top: 32px; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; z-index: 200; opacity: 0; transition: all 0.3s; pointer-events: none; }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    .page { display: none; padding-bottom: 80px; }
+    .page.active { display: block; }
+
+    /* Albums */
+    .albums-page { padding: 20px; padding-bottom: 100px; }
+    .album-card { border-radius: 16px; overflow: hidden; margin-bottom: 16px; background: white; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
+    .album-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--shadow); }
+    .album-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .album-photos img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+    .album-info { padding: 12px 16px; }
+    .album-info h4 { font-size: 15px; font-weight: 700; }
+    .album-info p { font-size: 13px; color: var(--text-light); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 20px 16px 60px; }
+      .hero-text h1 { font-size: 32px; }
+      .hero-text p { font-size: 16px; }
+      .phone-frame { width: 220px; height: 440px; }
+      .features h2, .testimonials h2, .cta-section h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Landing Page -->
+<div id="landing">
+  <nav class="nav">
+    <div class="logo">Tiny<span>Day</span></div>
+    <div class="nav-btns">
+      <button class="btn btn-outline" onclick="showAuth('login')">Sign In</button>
+      <button class="btn btn-primary" onclick="showAuth('signup')">Get Started Free</button>
+    </div>
+  </nav>
+  
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Every Day is a <em>TinyDay</em></h1>
+      <p>One photo, one note, one beautiful memory of your baby's first years. Turn precious daily moments into a lifetime keepsake.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" style="padding:14px 32px;font-size:16px" onclick="showAuth('signup')">Start Your Journey →</button>
+      </div>
+      <p style="font-size:13px;color:var(--text-light);margin-top:16px">✨ Free to use • No credit card needed</p>
+    </div>
+    <div class="hero-phone">
+      <div class="phone-frame">
+        <div class="phone-screen" id="previewCal"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>Why Parents <em>Love</em> TinyDay</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📸</div>
+        <h3>Daily Snapshot</h3>
+        <p>One photo a day. That's all it takes. Build an incredible visual timeline of your baby growing up.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Beautiful Calendar</h3>
+        <p>See your memories come alive in a gorgeous calendar view. Every day tells a story at a glance.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍👩‍👧</div>
+        <h3>Share with Family</h3>
+        <p>Grandparents miss every moment. Share a secure link so they can follow along in real time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <h2>Loved by Families</h2>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"I take a photo every morning and write one sentence. My daughter is 8 months now and looking back at the calendar is magical."</p>
+        <div class="author">— Sarah M., Mom of 1</div>
+      </div>
+      <div class="test-card">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"The share link feature is amazing. My parents in another state follow our baby's journey every day!"</p>
+        <div class="author">— David L., Dad of twins</div>
+      </div>
+      <div class="test-card">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"So simple yet so powerful. Best baby app I've tried. No clutter, no ads — just memories."</p>
+        <div class="author">— Emily R., Mom of 2</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Start Capturing <em>Today</em></h2>
+    <p>Every day is a gift. Don't let these tiny moments fade away.</p>
+    <button class="btn btn-primary" style="padding:16px 40px;font-size:18px" onclick="showAuth('signup')">Create Your Free Account →</button>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 TinyDay. Made with ❤️ for parents everywhere.</p>
+  </footer>
+</div>
+
+<!-- App -->
+<div id="app">
+  <!-- Auth: Login -->
+  <div id="page-login" class="auth-page page">
+    <div class="logo">Tiny<span>Day</span></div>
+    <p class="subtitle">Welcome back!</p>
+    <div class="auth-form">
+      <button class="google-btn" onclick="loginGoogle()">G Sign in with Google</button>
+      <div class="divider">or</div>
+      <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+      <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In</button>
+      <p class="auth-switch">Don't have an account? <a onclick="showPage('page-signup')">Sign Up</a></p>
+    </div>
+  </div>
+
+  <!-- Auth: Signup -->
+  <div id="page-signup" class="auth-page page">
+    <div class="logo">Tiny<span>Day</span></div>
+    <p class="subtitle">Start your baby's journey</p>
+    <div class="auth-form">
+      <button class="google-btn" onclick="loginGoogle()">G Sign up with Google</button>
+      <div class="divider">or</div>
+      <div class="form-group"><label>Your Name</label><input type="text" id="signup-name" placeholder="Your name"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="signup-email" placeholder="your@email.com"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="signup-pass" placeholder="At least 6 characters"></div>
+      <button class="btn btn-primary btn-full" onclick="handleSignup()">Create Account</button>
+      <p class="auth-switch">Already have an account? <a onclick="showPage('page-login')">Sign In</a></p>
+    </div>
+  </div>
+
+  <!-- Setup -->
+  <div id="page-setup" class="setup-page page">
+    <div class="progress"><div class="step active"></div><div class="step active"></div><div class="step active"></div></div>
+    <h2 style="margin-bottom:8px">Tell us about your baby 👶</h2>
+    <p style="color:var(--text-light);margin-bottom:24px;font-size:14px">This helps us personalize the experience</p>
+    <div class="avatar-upload" id="avatar-upload" onclick="document.getElementById('avatar-input').click()">📷</div>
+    <input type="file" id="avatar-input" accept="image/*" hidden onchange="previewAvatar(event)">
+    <div class="auth-form" style="max-width:360px">
+      <div class="form-group"><label>Baby's Name</label><input type="text" id="baby-name" placeholder="e.g. Emma"></div>
+      <div class="form-group"><label>Birthday</label><input type="date" id="baby-birthday" value="2025-08-01"></div>
+      <div class="form-group">
+        <label>Gender</label>
+        <select id="baby-gender">
+          <option value="girl">Girl 👧</option>
+          <option value="boy">Boy 👦</option>
+          <option value="other">Other 🌈</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="handleSetup()">Let's Start!</button>
+    </div>
+  </div>
+
+  <!-- Calendar View -->
+  <div id="page-calendar" class="page active">
+    <div class="app-header">
+      <div class="baby-info">
+        <div class="baby-avatar" id="cal-avatar">👶</div>
+        <div>
+          <div class="baby-name" id="cal-name">Emma</div>
+          <div class="baby-age" id="cal-age">8 months old</div>
+        </div>
+      </div>
+      <button class="settings-btn" onclick="showPage('page-settings')">⚙️</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="num" id="stat-days">0</div><div class="label">Days Old</div></div>
+      <div class="stat-item"><div class="num" id="stat-photos">0</div><div class="label">Photos</div></div>
+      <div class="stat-item"><div class="num" id="stat-streak">0</div><div class="label">Day Streak</div></div>
+    </div>
+    <div class="cal-nav">
+      <button onclick="changeMonth(-1)">◀</button>
+      <h2 id="cal-month-year">April 2026</h2>
+      <button onclick="changeMonth(1)">▶</button>
+    </div>
+    <div class="calendar-grid" id="calendar-grid"></div>
+  </div>
+
+  <!-- Add Memory -->
+  <div id="page-add" class="page">
+    <div class="add-page">
+      <div class="date-header">
+        <h2>Today's Moment ✨</h2>
+        <p id="add-date">April 26, 2026 • Day 1</p>
+      </div>
+      <div class="photo-upload" id="photo-upload" onclick="document.getElementById('photo-input').click()">
+        <div class="icon">📷</div>
+        <div class="text">Tap to add today's photo</div>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" hidden onchange="previewPhoto(event)">
+      <div class="quick-tags" id="quick-tags">
+        <div class="quick-tag" onclick="setNote('Said "mama" for the first time! 😍')">🗣️ Said "mama"</div>
+        <div class="quick-tag" onclick="setNote('New tooth came in! 🦷')">🦷 New tooth!</div>
+        <div class="quick-tag" onclick="setNote('Took first steps today! 🎉')">🚶 First steps!</div>
+        <div class="quick-tag" onclick="setNote('Slept through the night! 😴')">😴 Slept all night</div>
+        <div class="quick-tag" onclick="setNote('Tried solid food for the first time! 🥕')">🥕 First solid food</div>
+        <div class="quick-tag" onclick="setNote('Giggled so much today! 🤭')">😂 Lots of giggles</div>
+      </div>
+      <textarea class="note-input" id="note-input" placeholder="Write a note about today..."></textarea>
+      <button class="btn btn-primary btn-full" style="margin-top:16px" onclick="saveMemory()">💾 Save Memory</button>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div id="page-timeline" class="page">
+    <div class="app-header">
+      <div class="baby-info">
+        <div class="baby-avatar" id="tl-avatar">👶</div>
+        <div>
+          <div class="baby-name" id="tl-name">Emma</div>
+          <div class="baby-age" id="tl-age">8 months old</div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+    <div class="timeline-page" id="timeline-content"></div>
+  </div>
+
+  <!-- Albums -->
+  <div id="page-albums" class="page">
+    <div class="app-header">
+      <div class="baby-info">
+        <div class="baby-avatar" id="al-avatar">👶</div>
+        <div>
+          <div class="baby-name" id="al-name">Emma</div>
+          <div class="baby-age" id="al-age">8 months old</div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+    <div class="albums-page" id="albums-content"></div>
+  </div>
+
+  <!-- Share -->
+  <div id="page-share" class="page">
+    <div class="app-header">
+      <div class="baby-info">
+        <div class="baby-avatar" id="sh-avatar">👶</div>
+        <div>
+          <div class="baby-name" id="sh-name">Emma</div>
+          <div class="baby-age" id="sh-age">8 months old</div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+    <div class="share-page" id="share-content"></div>
+  </div>
+
+  <!-- Settings -->
+  <div id="page-settings" class="page">
+    <div class="app-header" style="margin-bottom:8px">
+      <div class="baby-info">
+        <button style="background:none;border:none;font-size:22px;cursor:pointer" onclick="showPage('page-calendar')">←</button>
+        <div style="margin-left:12px"><div style="font-weight:800;font-size:18px">Settings</div></div>
+      </div>
+      <div></div>
+    </div>
+    <div class="settings-page">
+      <div class="settings-section">
+        <h3>BABY PROFILE</h3>
+        <div class="settings-item" onclick="showPage('page-setup')"><div class="si-left"><span class="si-icon">👶</span><span class="si-label">Edit Baby Info</span></div><span class="si-value">›</span></div>
+      </div>
+      <div class="settings-section">
+        <h3>ACCOUNT</h3>
+        <div class="settings-item"><div class="si-left"><span class="si-icon">📧</span><span class="si-label">Email</span></div><span class="si-value" id="settings-email">—</span></div>
+        <div class="settings-item"><div class="si-left"><span class="si-icon">🔔</span><span class="si-label">Daily Reminder</span></div><span class="si-value">Off ›</span></div>
+        <div class="settings-item"><div class="si-left"><span class="si-icon">🔒</span><span class="si-label">Privacy</span></div><span class="si-value">Private ›</span></div>
+      </div>
+      <div class="settings-section">
+        <h3>DATA</h3>
+        <div class="settings-item" onclick="exportData()"><div class="si-left"><span class="si-icon">📥</span><span class="si-label">Export All Data</span></div><span class="si-value">›</span></div>
+        <div class="settings-item" onclick="clearAllData()"><div class="si-left"><span class="si-icon">🗑️</span><span class="si-label">Clear All Data</span></div><span class="si-value">›</span></div>
+      </div>
+      <button class="btn btn-danger btn-full" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
+    <button class="nav-item active" onclick="switchTab('calendar')"><span class="nav-icon">📅</span><span class="nav-label">Calendar</span></button>
+    <button class="nav-item" onclick="switchTab('timeline')"><span class="nav-icon">📜</span><span class="nav-label">Timeline</span></button>
+    <button class="nav-item add-btn" onclick="switchTab('add')"><span class="nav-icon">+</span></button>
+    <button class="nav-item" onclick="switchTab('albums')"><span class="nav-icon">📖</span><span class="nav-label">Albums</span></button>
+    <button class="nav-item" onclick="switchTab('share')"><span class="nav-icon">💌</span><span class="nav-label">Share</span></button>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal">
+      <div class="modal-photo" id="modal-photo"></div>
+      <div class="modal-content">
+        <div class="modal-date" id="modal-date"></div>
+        <div class="modal-day" id="modal-day"></div>
+        <div class="modal-note" id="modal-note"></div>
+        <button class="modal-close" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// State
+let state = {
+  user: null,
+  baby: null,
+  memories: [],
+  currentMonth: new Date().getMonth(),
+  currentYear: new Date().getFullYear(),
+  selectedPhoto: null,
+  tempAvatar: null
+};
+
+// Init
+function init() {
+  const saved = localStorage.getItem('tinyday_state');
+  if (saved) {
+    state = JSON.parse(saved);
+    if (state.user && state.baby) {
+      showApp();
+      return;
+    }
+    if (state.user && !state.baby) {
+      showPage('page-setup');
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      return;
+    }
+  }
+  buildPreviewCal();
+}
+
+function saveState() {
+  localStorage.setItem('tinyday_state', JSON.stringify(state));
+}
+
+function showAuth(type) {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  showPage('page-' + type);
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const navPages = ['page-calendar','page-timeline','page-albums','page-share','page-add'];
+  document.getElementById('bottom-nav').style.display = navPages.includes(id) ? 'flex' : 'none';
+  if (navPages.includes(id)) renderCurrentTab(id);
+}
+
+function showApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  showPage('page-calendar');
+  renderApp();
+  if (state.memories.length === 0) seedDemoData();
+}
+
+// Auth
+function handleSignup() {
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-pass').value;
+  if (!name || !email || !pass) return toast('Please fill all fields');
+  state.user = { name, email };
+  saveState();
+  showPage('page-setup');
+}
+
+function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!email) return toast('Please enter email');
+  state.user = { name: email.split('@')[0], email };
+  saveState();
+  if (state.baby) showApp(); else showPage('page-setup');
+}
+
+function loginGoogle() {
+  state.user = { name: 'Google User', email: 'user@gmail.com' };
+  saveState();
+  if (state.baby) showApp(); else showPage('page-setup');
+}
+
+function handleLogout() {
+  localStorage.removeItem('tinyday_state');
+  state = { user: null, baby: null, memories: [], currentMonth: new Date().getMonth(), currentYear: new Date().getFullYear(), selectedPhoto: null, tempAvatar: null };
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('landing').style.display = 'block';
+  buildPreviewCal();
+}
+
+// Setup
+function previewAvatar(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    state.tempAvatar = ev.target.result;
+    document.getElementById('avatar-upload').innerHTML = '<img src="' + ev.target.result + '">';
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleSetup() {
+  const name = document.getElementById('baby-name').value.trim();
+  const birthday = document.getElementById('baby-birthday').value;
+  const gender = document.getElementById('baby-gender').value;
+  if (!name || !birthday) return toast('Please fill baby name and birthday');
+  const avatar = state.tempAvatar || null;
+  const genderEmoji = gender === 'girl' ? '👧' : gender === 'boy' ? '👦' : '🌈';
+  state.baby = { name, birthday, gender, avatar, genderEmoji };
+  saveState();
+  showApp();
+}
+
+// Render App
+function renderApp() {
+  const b = state.baby;
+  if (!b) return;
+  const age = getAgeText(new Date(b.birthday));
+  const avatarHtml = b.avatar ? '<img src="' + b.avatar + '">' : b.genderEmoji;
+  ['cal','tl','al','sh'].forEach(prefix => {
+    const a = document.getElementById(prefix + '-avatar');
+    if (a) a.innerHTML = avatarHtml;
+    const n = document.getElementById(prefix + '-name');
+    if (n) n.textContent = b.name;
+    const ag = document.getElementById(prefix + '-age');
+    if (ag) ag.textContent = age;
+  });
+  document.getElementById('settings-email').textContent = state.user ? state.user.email : '—';
+  renderCalendar();
+}
+
+function getAgeText(birthDate) {
+  const now = new Date();
+  let months = (now.getFullYear() - birthDate.getFullYear()) * 12 + now.getMonth() - birthDate.getMonth();
+  let days = now.getDate() - birthDate.getDate();
+  if (days < 0) { months--; days += 30; }
+  if (months >= 12) {
+    const y = Math.floor(months / 12), m = months % 12;
+    return y + ' year' + (y > 1 ? 's' : '') + (m > 0 ? ' ' + m + ' mo' : '');
+  }
+  return months + ' month' + (months !== 1 ? 's' : '') + (days > 0 ? ' ' + days + 'd' : '');
+}
+
+function getDaysSince(birthDate) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const bd = new Date(birthDate); bd.setHours(0,0,0,0);
+  return Math.floor((now - bd) / 86400000);
+}
+
+// Calendar
+function changeMonth(dir) {
+  state.currentMonth += dir;
+  if (state.currentMonth > 11) { state.currentMonth = 0; state.currentYear++; }
+  if (state.currentMonth < 0) { state.currentMonth = 11; state.currentYear--; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const y = state.currentYear, m = state.currentMonth;
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-year').textContent = monthNames[m] + ' ' + y;
+
+  const grid = document.getElementById('calendar-grid');
+  grid.innerHTML = '';
+  const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  weekdays.forEach(d => { grid.innerHTML += '<div class="cal-weekday">' + d + '</div>'; });
+
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  const today = new Date();
+
+  for (let i = 0; i < firstDay; i++) grid.innerHTML += '<div class="cal-day empty"></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const memory = state.memories.find(mem => mem.date === dateStr);
+    const isToday = d === today.getDate() && m === today.getMonth() && y === today.getFullYear();
+    let html = '<div class="cal-day' + (memory ? ' has-photo' : ' no-photo') + (isToday ? ' today' : '') + '" onclick="' + (memory ? "showDetail('" + dateStr + "')" : "switchTab('add')") + '">';
+    if (memory && memory.photo) html += '<img src="' + memory.photo + '">';
+    else html += '+';
+    html += '<span class="day-num">' + d + '</span></div>';
+    grid.innerHTML += html;
+  }
+
+  // Stats
+  if (state.baby) {
+    const days = getDaysSince(new Date(state.baby.birthday));
+    document.getElementById('stat-days').textContent = days;
+    document.getElementById('stat-photos').textContent = state.memories.length;
+    let streak = 0;
+    const sorted = [...state.memories].sort((a,b) => b.date.localeCompare(a.date));
+    const t = new Date();
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(t); d.setDate(d.getDate() - i);
+      const ds = d.toISOString().split('T')[0];
+      if (state.memories.find(mem => mem.date === ds)) streak++;
+      else break;
+    }
+    document.getElementById('stat-streak').textContent = streak;
+  }
+
+  // Update add page date
+  document.getElementById('add-date').textContent = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' • Day ' + (state.baby ? getDaysSince(new Date(state.baby.birthday)) + 1 : '?');
+}
+
+// Add Memory
+function previewPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    state.selectedPhoto = ev.target.result;
+    document.getElementById('photo-upload').innerHTML = '<img src="' + ev.target.result + '">';
+  };
+  reader.readAsDataURL(file);
+}
+
+function setNote(text) {
+  document.getElementById('note-input').value = text;
+}
+
+function saveMemory() {
+  const note = document.getElementById('note-input').value.trim();
+  if (!state.selectedPhoto && !note) return toast('Add a photo or a note!');
+  const today = new Date().toISOString().split('T')[0];
+  const existing = state.memories.findIndex(m => m.date === today);
+  const memory = { date: today, photo: state.selectedPhoto || null, note: note };
+  if (existing >= 0) state.memories[existing] = memory;
+  else state.memories.push(memory);
+  state.selectedPhoto = null;
+  document.getElementById('photo-upload').innerHTML = '<div class="icon">📷</div><div class="text">Tap to add today\'s photo</div>';
+  document.getElementById('note-input').value = '';
+  document.getElementById('photo-input').value = '';
+  saveState();
+  toast('Memory saved! ✨');
+  renderCalendar();
+}
+
+// Timeline
+function renderTimeline() {
+  const container = document.getElementById('timeline-content');
+  const sorted = [...state.memories].sort((a,b) => b.date.localeCompare(a.date));
+  if (sorted.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--text-light);margin-top:40px">No memories yet. Tap + to add your first!</p>'; return; }
+  let html = '', lastMonth = '';
+  sorted.forEach(mem => {
+    const d = new Date(mem.date + 'T00:00:00');
+    const monthKey = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+    if (monthKey !== lastMonth) { html += '<div class="timeline-month"><h3>' + monthKey + '</h3></div>'; lastMonth = monthKey; }
+    const dayNum = state.baby ? getDaysSince(new Date(state.baby.birthday)) - getDaysSince(d) + 1 : '';
+    html += '<div class="timeline-item" onclick="showDetail(\'' + mem.date + '\')">';
+    html += '<div class="tl-photo">' + (mem.photo ? '<img src="' + mem.photo + '">' : '📷') + '</div>';
+    html += '<div class="tl-content"><div class="tl-date">' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + '</div>';
+    html += '<div class="tl-note">' + (mem.note || 'No note') + '</div>';
+    if (dayNum) html += '<div class="tl-day">Day ' + dayNum + '</div>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// Albums
+function renderAlbums() {
+  const container = document.getElementById('albums-content');
+  const milestones = [
+    { title: 'First Month', desc: 'Days 1-30', filter: m => { if(!state.baby) return false; return getDaysSince(new Date(m.date)) < 30; }},
+    { title: 'First Smile', desc: 'Special moments', filter: m => m.note && (m.note.toLowerCase().includes('smile') || m.note.toLowerCase().includes('giggle')) },
+    { title: 'All Photos', desc: state.memories.length + ' memories', filter: () => true }
+  ];
+  let html = '';
+  milestones.forEach(album => {
+    const photos = state.memories.filter(album.filter).slice(0, 6);
+    html += '<div class="album-card">';
+    html += '<div class="album-photos">';
+    for (let i = 0; i < 6; i++) html += photos[i] && photos[i].photo ? '<img src="' + photos[i].photo + '">' : '<div style="aspect-ratio:1;background:var(--cream)"></div>';
+    html += '</div><div class="album-info"><h4>' + album.title + '</h4><p>' + album.desc + '</p></div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// Share
+function renderShare() {
+  const container = document.getElementById('share-content');
+  const latest = [...state.memories].sort((a,b) => b.date.localeCompare(a.date))[0];
+  if (!latest) { container.innerHTML = '<p style="text-align:center;color:var(--text-light);margin-top:40px">No memories to share yet!</p>'; return; }
+  const d = new Date(latest.date + 'T00:00:00');
+  let html = '<h3 style="margin-bottom:16px;font-weight:800">Share a Memory 💌</h3>';
+  html += '<div class="share-card">';
+  html += '<div class="sc-photo">' + (latest.photo ? '<img src="' + latest.photo + '">' : '📷') + '</div>';
+  html += '<div class="sc-info"><div class="sc-baby">' + (state.baby ? state.baby.name : 'Baby') + '\'s TinyDay</div>';
+  html += '<div class="sc-date">' + d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '</div>';
+  html += '<div class="sc-note">' + (latest.note || 'A beautiful moment ❤️') + '</div></div>';
+  html += '<div class="sc-footer"><span class="brand">TinyDay</span><span style="font-size:12px;color:var(--text-light)">Every day is a gift</span></div></div>';
+  html += '<div class="share-btns">';
+  html += '<button class="share-btn s-twitter" onclick="shareTwitter()">𝕏 Twitter</button>';
+  html += '<button class="share-btn s-facebook" onclick="shareFacebook()">📘 Facebook</button>';
+  html += '<button class="share-btn s-copy" onclick="copyShareLink()">🔗 Copy Link</button>';
+  html += '<button class="share-btn s-save" onclick="saveToPhotos()">💾 Save Photo</button>';
+  html += '</div>';
+  html += '<div class="family-section"><h3>👨‍👩‍👧 Family Sharing</h3>';
+  html += '<p>Share a private link so family can follow along</p>';
+  html += '<div class="family-link"><span>🔒</span><code>tinyday.app/share/baby-em-2026</code></div></div>';
+  container.innerHTML = html;
+}
+
+function shareTwitter() { window.open('https://twitter.com/intent/tweet?text=Every%20day%20is%20a%20TinyDay!%20%F0%9F%91%B6&url=https://tinyday.app', '_blank'); }
+function shareFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=https://tinyday.app', '_blank'); }
+function copyShareLink() { navigator.clipboard.writeText('https://tinyday.app/share/' + (state.baby ? state.baby.name.toLowerCase().replace(/\s/g,'-') : 'baby')); toast('Link copied! 🔗'); }
+function saveToPhotos() { toast('Long press the image above to save! 📱'); }
+
+// Detail Modal
+function showDetail(dateStr) {
+  const mem = state.memories.find(m => m.date === dateStr);
+  if (!mem) return;
+  const d = new Date(dateStr + 'T00:00:00');
+  document.getElementById('modal-photo').innerHTML = mem.photo ? '<img src="' + mem.photo + '">' : '📷';
+  document.getElementById('modal-date').textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('modal-day').textContent = state.baby ? 'Day ' + (getDaysSince(new Date(state.baby.birthday)) - getDaysSince(d) + 1) : '';
+  document.getElementById('modal-note').textContent = mem.note || 'No note for this day';
+  document.getElementById('detail-modal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('detail-modal').classList.remove('show'); }
+document.getElementById('detail-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+// Tab Switching
+function switchTab(tab) {
+  const pages = { calendar: 'page-calendar', timeline: 'page-timeline', add: 'page-add', albums: 'page-albums', share: 'page-share' };
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const items = document.querySelectorAll('.nav-item');
+  const idx = { calendar: 0, timeline: 1, add: 2, albums: 3, share: 4 }[tab];
+  if (items[idx]) items[idx].classList.add('active');
+  showPage(pages[tab]);
+}
+
+function renderCurrentTab(pageId) {
+  if (pageId === 'page-calendar') renderCalendar();
+  else if (pageId === 'page-timeline') renderTimeline();
+  else if (pageId === 'page-albums') renderAlbums();
+  else if (pageId === 'page-share') renderShare();
+}
+
+// Settings
+function exportData() {
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'tinyday-backup.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Data exported! 📥');
+}
+
+function clearAllData() {
+  if (confirm('Are you sure? This will delete ALL your memories!')) {
+    state.memories = [];
+    saveState();
+    toast('All data cleared');
+    renderCalendar();
+  }
+}
+
+// Toast
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Demo Data
+function seedDemoData() {
+  const notes = [
+    'First smile at daddy! 😊', 'Tried sweet potato for the first time 🍠',
+    'Rolled over all by herself! 🎉', 'Sleeping through the night finally 😴',
+    'Splash time in the bath! 🛁', 'Met grandma for the first time 👵',
+    'Playing with favorite teddy bear 🧸', 'New pink outfit day! 👗',
+    'Giggles during peekaboo 🤭', 'First time at the park! 🌳',
+    'Said "dada" today!! 😍', 'Crawling like a pro now 🏃'
+  ];
+  const today = new Date();
+  const seedColors = ['#FFB3BA','#BAFFC9','#BAE1FF','#FFFFBA','#E8BAFF','#FFD4BA','#BAF2FF','#FFBAE8','#D4FFBA','#FFBABA','#BABAFF','#BAFFEA'];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i * 3);
+    const dateStr = d.toISOString().split('T')[0];
+    // Generate placeholder image with SVG
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="' + seedColors[i] + '"/><text x="100" y="110" text-anchor="middle" font-size="60">' + (['👶','🧸','🎈','🍼','🌸','🎀','🦆','🌈','⭐','🐱','🌻','🎉'])[i] + '</text></svg>';
+    const photo = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+    state.memories.push({ date: dateStr, photo, note: notes[11 - i] });
+  }
+  saveState();
+  renderCalendar();
+}
+
+// Preview Calendar on Landing
+function buildPreviewCal() {
+  const container = document.getElementById('previewCal');
+  const emojis = ['👶','😊','🧸','🎈','🍼','🌸'];
+  let html = '<div class="phone-header"><h3>TinyDay</h3><small>Emma\'s Calendar</small></div>';
+  for (let i = 0; i < 35; i++) {
+    if (i < 3) html += '<div class="cal-cell empty"></div>';
+    else if (emojis[i - 3]) html += '<div class="cal-cell" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--pink-light)">' + emojis[i - 3] + '</div>';
+    else html += '<div class="cal-cell empty"></div>';
+  }
+  container.innerHTML = html;
+}
+
+// Start
+init();
+</script>
+</body>
+</html>
