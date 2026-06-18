@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tinyday-qh1x.vercel.app/sitemap.xml
