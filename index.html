@@ -67,6 +67,24 @@
     .cta-section p { color: var(--text-light); font-size: 18px; margin-bottom: 32px; }
     .footer { text-align: center; padding: 32px; color: var(--text-light); font-size: 14px; border-top: 1px solid var(--border); }
 
+    /* Pricing */
+    .pricing-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; text-align: center; }
+    .pricing-section h2 { font-size: 36px; margin-bottom: 12px; }
+    .pricing-section h2 em { font-style: normal; color: var(--pink); }
+    .pricing-section .pricing-subtitle { color: var(--text-light); font-size: 16px; margin-bottom: 48px; }
+    .pricing-card { background: white; border-radius: 24px; padding: 40px 32px; max-width: 420px; margin: 0 auto; border: 2px solid var(--pink); box-shadow: 0 10px 40px var(--shadow); position: relative; overflow: hidden; }
+    .pricing-card .badge { position: absolute; top: 20px; right: -32px; background: linear-gradient(135deg, var(--gold), #E8B730); color: white; padding: 6px 40px; font-size: 12px; font-weight: 800; transform: rotate(45deg); }
+    .pricing-card .plan-name { font-size: 14px; font-weight: 700; color: var(--pink-dark); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+    .pricing-card .price { font-size: 56px; font-weight: 800; color: var(--text); line-height: 1; }
+    .pricing-card .price sub { font-size: 18px; font-weight: 600; color: var(--text-light); }
+    .pricing-card .price-label { color: var(--text-light); font-size: 14px; margin-bottom: 24px; }
+    .pricing-card .trial-badge { display: inline-block; background: var(--pink-light); color: var(--pink-dark); padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 700; margin-bottom: 24px; }
+    .pricing-features { text-align: left; margin-bottom: 28px; }
+    .pricing-features li { list-style: none; padding: 8px 0; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .pricing-features li::before { content: '✓'; color: var(--pink-dark); font-weight: 800; font-size: 16px; }
+    .pricing-card .btn-primary { width: 100%; padding: 14px; font-size: 16px; }
+    .guarantee { margin-top: 20px; font-size: 13px; color: var(--text-light); }
+
     /* App Container */
     #app { display: none; max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; }
     
@@ -245,7 +263,7 @@
     <div class="logo">Tiny<span>Day</span></div>
     <div class="nav-btns">
       <button class="btn btn-outline" onclick="showAuth('login')">Sign In</button>
-      <button class="btn btn-primary" onclick="showAuth('signup')">Get Started Free</button>
+      <button class="btn btn-primary" onclick="showAuth('signup')">Start Free Trial</button>
     </div>
   </nav>
   
@@ -254,9 +272,9 @@
       <h1>Every Day is a <em>TinyDay</em></h1>
       <p>One photo, one note, one beautiful memory of your baby's first years. Turn precious daily moments into a lifetime keepsake.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <button class="btn btn-primary" style="padding:14px 32px;font-size:16px" onclick="showAuth('signup')">Start Your Journey →</button>
+        <button class="btn btn-primary" style="padding:14px 32px;font-size:16px" onclick="showAuth('signup')">Start Free Trial →</button>
       </div>
-      <p style="font-size:13px;color:var(--text-light);margin-top:16px">✨ Free to use • No credit card needed</p>
+      <p style="font-size:13px;color:var(--text-light);margin-top:16px">🎁 First month free • $9.99 lifetime after</p>
     </div>
     <div class="hero-phone">
       <div class="phone-frame">
@@ -307,10 +325,33 @@
     </div>
   </section>
 
+  <section class="pricing-section">
+    <h2>Simple <em>Pricing</em></h2>
+    <p class="pricing-subtitle">One price. Forever access. No subscriptions.</p>
+    <div class="pricing-card">
+      <div class="badge">BEST VALUE</div>
+      <div class="plan-name">Lifetime Access</div>
+      <div class="price">$9<sub>.99</sub></div>
+      <div class="price-label">one-time · no recurring fees</div>
+      <div class="trial-badge">🎁 First Month Free</div>
+      <ul class="pricing-features">
+        <li>Unlimited photos & memories</li>
+        <li>Beautiful calendar & timeline view</li>
+        <li>Private family sharing links</li>
+        <li>Monthly milestone albums</li>
+        <li>PDF & photo export</li>
+        <li>Daily reminder notifications</li>
+        <li>All future updates included</li>
+      </ul>
+      <button class="btn btn-primary" onclick="showAuth('signup')">Start Your Free Month →</button>
+      <p class="guarantee">Try free for 30 days. Cancel anytime during trial — no charge.</p>
+    </div>
+  </section>
+
   <section class="cta-section">
-    <h2>Start Capturing <em>Today</em></h2>
-    <p>Every day is a gift. Don't let these tiny moments fade away.</p>
-    <button class="btn btn-primary" style="padding:16px 40px;font-size:18px" onclick="showAuth('signup')">Create Your Free Account →</button>
+    <h2>Every Tiny Day <em>Matters</em></h2>
+    <p>Start your free month today. Capture tomorrow's memory before it slips away.</p>
+    <button class="btn btn-primary" style="padding:16px 40px;font-size:18px" onclick="showAuth('signup')">Start Free Trial →</button>
   </section>
 
   <footer class="footer">

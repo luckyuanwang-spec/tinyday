@@ -21,6 +21,13 @@
 
 Simply open `index.html` in your browser, or deploy to any static hosting (Vercel, Netlify, etc.).
 
+## Pricing
+
+- 🎁 **First month free** — full access, no credit card required to start
+- 💰 **$9.99 lifetime** — one-time payment, forever access
+- 🔄 **Cancel anytime** during trial, never charged
+
+
 ## License
 
 MIT
